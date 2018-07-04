@@ -855,6 +855,14 @@ def InstallUSD(context):
 
         if context.buildPython:
             extraArgs.append('-DPXR_ENABLE_PYTHON_SUPPORT=ON')
+            if MacOS():
+                import distutils.sysconfig
+                pyLibPath = distutils.sysconfig.get_config_var('LIBDIR')
+                pyIncPath = distutils.sysconfig.get_config_var('INCLUDEPY')
+                extraArgs.append('-DPYTHON_LIBRARY=' + pyLibPath + '/libpython2.7.a')
+                extraArgs.append('-DPYTHON_INCLUDE_DIR=' + pyIncPath)
+            else:
+                extraArgs.append('-DPXR_ENABLE_PYTHON_SUPPORT=OFF')
         else:
             extraArgs.append('-DPXR_ENABLE_PYTHON_SUPPORT=OFF')
 
